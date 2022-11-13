@@ -3,7 +3,6 @@ package com.example.transoapp.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.transoapp.pojo.AgeData
 import com.example.transoapp.retrofit.APIInterface
 import com.example.transoapp.utils.NetworkResult
 import com.example.transoapp.utils.SafeApiCall
@@ -35,27 +34,5 @@ class ExampleRepository @Inject constructor(private val APIInterface: APIInterfa
 
     }
 
-
-    private val _age = MutableLiveData<AgeData?>()
-    val age: LiveData<AgeData?>
-        get() = _age
-
-    suspend fun callGetAgeApi(name: String) {
-        val result: NetworkResult<Response<AgeData?>> = SafeApiCall.safeApiCall {
-            APIInterface.getAge(name)
-        }
-        when (result) {
-            is NetworkResult.Success -> {//Handle success
-                if (result.data.isSuccessful && result.data.body() != null) {
-                    _age.postValue(result.data.body())
-                }
-            }
-            is NetworkResult.Error -> { //Handle error
-                Log.e("Error", result.message.toString())
-                _age.postValue(null)
-            }
-        }
-
-    }
 
 }
